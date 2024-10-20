@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package digimon;
+
+option go_package = "generated/digimon";
+
+service PrimaryNode {
+    rpc SendStatus(DigimonStatus) returns (Response);
+}
+
+message DigimonStatus {
+    string digimonEncrypt = 1;
+}
+
+message Response {
+    string message = 1;
+}
