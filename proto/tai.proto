@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package Tai;
+
+option go_package = "generated/digimon";
+
+service Tai {
+    rpc getSacrificed(Request) returns (Response);
+}
+
+message Request {
+    string request_message = 1;
+}
+
+message Response {
+  int32 sacrificed_digimons = 1; 
+  float accumulated_data = 2;    
+}
+
