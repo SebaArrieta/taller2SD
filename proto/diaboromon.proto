@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package diaboromon;
+option go_package = "generated/diaboromon";
+
+service Diaboromon {
+  rpc Attack (AttackRequest) returns (AttackResponse);
+  rpc TaiDefeated (DefeatRequest) returns (DefeatResponse); //Tai indica a diaboromon que fue derrotado
+}
+
+message AttackRequest {
+  float attackreq = 1;  
+}
+
+message AttackResponse {
+  int32 attackresp = 1;  // Resultado del ataque: "Omegamon derrotó a Diaboromon" o "-10" si Diaboromon sobrevive
+}
+
+message DefeatRequest {
+    int32 defreq = 1;
+}
+
+message DefeatResponse {
+    int32 defresp = 1;
+}
