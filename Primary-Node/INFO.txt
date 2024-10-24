@@ -1,105 +1,96 @@
-0,1,Ignitemon,Sacrificado
-1,1,Jellymon,No-Sacrificado
-2,2,Sparrowmon,No-Sacrificado
-3,1,Herissmon,Sacrificado
-4,2,Pulsemon,Sacrificado
-5,1,Junkmon,Sacrificado
-6,2,Phascomon,Sacrificado
-7,1,Lopmon (X Antibody),Sacrificado
-8,2,Pomumon,Sacrificado
-9,1,Monmon,Sacrificado
-10,1,Bulucomon,Sacrificado
-11,2,SnowGoblimon,Sacrificado
-12,1,Gomamon (X Antibody),Sacrificado
-13,2,Neemon,No-Sacrificado
-14,1,Lucemon,No-Sacrificado
-15,1,Bokomon,Sacrificado
-16,1,KoKabuterimon,No-Sacrificado
-17,1,Falcomon,No-Sacrificado
-18,2,Psychemon,No-Sacrificado
-19,2,Starmons,Sacrificado
+0,1,Agumon (X Antibody),No-Sacrificado
+1,2,Palmon (X Antibody),Sacrificado
+2,2,Terriermon Assistant,No-Sacrificado
+3,2,Sparrowmon,Sacrificado
+4,1,Crabmon,Sacrificado
+5,1,KoKabuterimon,No-Sacrificado
+6,2,Syakomon,No-Sacrificado
+7,2,Renamon (X Antibody),Sacrificado
+8,1,ClearAgumon,Sacrificado
+9,1,Burgamon,Sacrificado
+10,1,Monodramon,Sacrificado
+11,2,Sunarizamon,Sacrificado
+12,1,Lopmon,No-Sacrificado
+13,1,Kotemon,Sacrificado
+14,1,Kudamon,No-Sacrificado
+15,1,Bakomon,Sacrificado
+16,1,Mushroomon,Sacrificado
+17,1,Agumon Expert,Sacrificado
+18,1,Labramon,No-Sacrificado
+19,2,Swimmon,No-Sacrificado
 20,2,Shoemon,Sacrificado
-21,1,Gabumon (X Antibody),Sacrificado
-22,2,ToyAgumon,Sacrificado
-23,2,Palmon (X Antibody),Sacrificado
-24,2,Pteromon,Sacrificado
-25,2,Tsukaimon,No-Sacrificado
-26,1,ClearAgumon,Sacrificado
-27,1,Gaomon,Sacrificado
-28,2,Tentomon,No-Sacrificado
-29,2,Renamon (X Antibody),No-Sacrificado
-30,1,Agumon (X Antibody),No-Sacrificado
-31,2,PawnChessmon (Black),Sacrificado
-32,1,Kamemon,Sacrificado
-33,1,Angoramon,No-Sacrificado
-34,1,Gumdramon,Sacrificado
-35,2,Terriermon Assistant,No-Sacrificado
-36,1,Candlemon,No-Sacrificado
-37,1,Jazamon,No-Sacrificado
-38,1,Gomamon,No-Sacrificado
-39,2,Terriermon,Sacrificado
-40,1,Dracomon,Sacrificado
-41,2,SnowAgumon,No-Sacrificado
-42,1,Bearmon,No-Sacrificado
-43,2,Sangomon,Sacrificado
-44,1,Luxmon,Sacrificado
-45,2,Palmon,Sacrificado
-46,1,Crabmon,No-Sacrificado
-47,2,Sistermon Blanc (Awake.),No-Sacrificado
-48,1,Lalamon,Sacrificado
-49,1,Biyomon,No-Sacrificado
-50,2,Ryudamon (X Antibody),No-Sacrificado
-51,1,Cutemon,No-Sacrificado
-52,1,Gotsumon (X Antibody),Sacrificado
-53,2,Pillomon,Sacrificado
-54,2,Solarmon,Sacrificado
-55,1,Huckmon,No-Sacrificado
-56,2,Zubamon,Sacrificado
-57,1,Impmon (X Antibody),Sacrificado
-58,2,Syakomon (X Antibody),No-Sacrificado
-59,1,Monitamon,Sacrificado
-60,2,Salamon (X Antibody),Sacrificado
-61,1,Gabumon,Sacrificado
-62,1,Ekakimon,Sacrificado
-63,1,Impmon,No-Sacrificado
-64,2,Syakomon,Sacrificado
-65,2,Shoutmon,No-Sacrificado
-66,1,ModokiBetamon,Sacrificado
-67,2,Otamamon (X Antibody),Sacrificado
-68,2,Tinkermon,No-Sacrificado
-69,1,Burgamon,Sacrificado
-70,2,Patamon,Sacrificado
-71,1,Gotsumon,Sacrificado
-72,1,Loogamon (X Antibody),Sacrificado
-73,2,Penmon,Sacrificado
-74,2,Salamon,No-Sacrificado
-75,1,Coronamon,Sacrificado
-76,2,Sunarizamon,Sacrificado
-77,1,Elecmon,Sacrificado
-78,2,Swimmon,Sacrificado
-79,2,Otamamon,Sacrificado
-80,1,Ghostmon,No-Sacrificado
-81,1,Liollmon,Sacrificado
-82,1,KoDokugumon,No-Sacrificado
-83,1,Lunamon,No-Sacrificado
-84,1,EbiBurgamon,Sacrificado
-85,1,Crabmon (X Antibody),No-Sacrificado
-86,1,BushiAgumon,No-Sacrificado
-87,1,Dracomon (X Antibody),Sacrificado
-88,1,Lopmon,Sacrificado
-89,1,Ludomon,No-Sacrificado
-90,1,Agumon,Sacrificado
-91,2,Zenimon,No-Sacrificado
-92,2,Soundbirdmon,No-Sacrificado
-93,1,Floramon,No-Sacrificado
-94,2,Tapirmon,Sacrificado
-95,1,Minidekachimon,Sacrificado
-96,2,Vorvomon,No-Sacrificado
-97,2,Sistermon Blanc,Sacrificado
-98,1,Kunemon,Sacrificado
-99,1,Monodramon,Sacrificado
-100,1,Bakomon,No-Sacrificado
-101,1,Agumon Expert,Sacrificado
-102,2,Terriermon (X Antibody),No-Sacrificado
-103,1,Dondokomon,No-Sacrificado
-104,1,Muchomon,Sacrificado
+21,1,Floramon,Sacrificado
+22,1,Loogamon (X Antibody),Sacrificado
+23,2,Pomumon,No-Sacrificado
+24,2,Otamamon (X Antibody),Sacrificado
+25,1,Impmon,Sacrificado
+26,1,Aruraumon,Sacrificado
+27,2,SnowAgumon,No-Sacrificado
+28,1,Ludomon,No-Sacrificado
+29,1,Gabumon (X Antibody),No-Sacrificado
+30,1,Huckmon,No-Sacrificado
+31,1,Elecmon,Sacrificado
+32,2,Penmon,No-Sacrificado
+33,1,KoDokugumon,No-Sacrificado
+34,2,Tsukaimon,No-Sacrificado
+35,1,Ekakimon,Sacrificado
+36,1,Bokomon,Sacrificado
+37,2,Starmons,Sacrificado
+38,1,Lucemon,Sacrificado
+39,2,Tapirmon,No-Sacrificado
+40,2,Otamamon,Sacrificado
+41,2,Ryudamon (X Antibody),No-Sacrificado
+42,1,Biyomon,Sacrificado
+43,1,Herissmon,Sacrificado
+44,1,Kokuwamon (X Antibody),No-Sacrificado
+45,1,Candlemon,No-Sacrificado
+46,2,Shoutmon,Sacrificado
+47,1,Gotsumon (X Antibody),Sacrificado
+48,1,Ghostmon,Sacrificado
+49,1,Dondokomon,No-Sacrificado
+50,2,Patamon,No-Sacrificado
+51,1,Agumon,Sacrificado
+52,1,Falcomon,No-Sacrificado
+53,1,EbiBurgamon,Sacrificado
+54,1,Gaomon,Sacrificado
+55,2,Tentomon,Sacrificado
+56,1,Junkmon,No-Sacrificado
+57,2,Phascomon,Sacrificado
+58,1,ModokiBetamon,No-Sacrificado
+59,2,Renamon,Sacrificado
+60,2,Syakomon (X Antibody),Sacrificado
+61,1,Ignitemon,Sacrificado
+62,1,Gumdramon,Sacrificado
+63,2,Tinkermon,Sacrificado
+64,2,PawnChessmon (Black),Sacrificado
+65,2,Soundbirdmon,No-Sacrificado
+66,2,Zenimon,No-Sacrificado
+67,2,Shamamon,Sacrificado
+68,2,Terriermon,Sacrificado
+69,1,Luxmon,Sacrificado
+70,1,Dracomon (X Antibody),No-Sacrificado
+71,2,Solarmon,Sacrificado
+72,1,Crabmon (X Antibody),Sacrificado
+73,2,PawnChessmon (White),Sacrificado
+74,1,Gabumon,No-Sacrificado
+75,2,Pulsemon,No-Sacrificado
+76,2,SnowGoblimon,Sacrificado
+77,1,Lopmon (X Antibody),No-Sacrificado
+78,2,Psychemon,No-Sacrificado
+79,2,Otamamon (Red),No-Sacrificado
+80,1,Bulucomon,No-Sacrificado
+81,1,BushiAgumon,Sacrificado
+82,1,Dorumon (X Antibody),Sacrificado
+83,1,Gomamon (X Antibody),Sacrificado
+84,1,Jellymon,Sacrificado
+85,2,Salamon (X Antibody),Sacrificado
+86,2,Pteromon,Sacrificado
+87,1,Impmon (X Antibody),No-Sacrificado
+88,2,Sistermon Blanc,No-Sacrificado
+89,1,Gomamon,Sacrificado
+90,1,Morphomon,No-Sacrificado
+91,1,Monitamon,Sacrificado
+92,1,Kamemon,Sacrificado
+93,2,Pillomon,Sacrificado
+94,1,Gotsumon,No-Sacrificado
+95,2,Vorvomon,No-Sacrificado

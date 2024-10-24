@@ -12,14 +12,18 @@ import (
 	"strings"
 	"sync"
 	"bufio"
+	"time"
 
 	pb "Primary-Node/generated"
+	pbDataNode "Primary-Node/generated/DataNode"
 
 	"google.golang.org/grpc"
 )
 
 type server struct {
 	pb.UnimplementedPrimaryNodeServer
+	dataNode1Client pbDataNode.StoreAtributoClient
+    dataNode2Client pbDataNode.StoreAtributoClient
 	mu      sync.Mutex
     counter int64
 }
@@ -59,16 +63,42 @@ func (s *server) SendStatus(ctx context.Context, req *pb.DigimonStatus) (*pb.Res
 		s.counter++
 		s.mu.Unlock()
 
-		writeRecord(digimonInfo, numDataNode, id)
+		if(writeRecord(digimonInfo, numDataNode, id)){
+			DataNodeRecord := fmt.Sprintf("%d,%s", id, digimonInfo[1])
+			sendToDataNode(numDataNode, DataNodeRecord, s)
+		}
 	}
 	return &pb.Response{Message: "Data received successfully"}, nil
 }
 
-func writeRecord(DigimonData []string, NumDataNode int, id int64){
+func sendToDataNode(DataNode int, record string, s *server){
+	ctxDataNode, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	
+	if(DataNode == 1){
+		res, err := s.dataNode1Client.GetAtributo(ctxDataNode, &pbDataNode.Request{DataAtributo: record})
+		if err != nil {
+			log.Printf("Error al comunicarse con el Data Node: %v", err)
+			return
+		}
+
+		log.Printf("Respuesta del Data Node: %s", res.GetMessage())
+	}else if(DataNode == 2){
+		res, err := s.dataNode2Client.GetAtributo(ctxDataNode, &pbDataNode.Request{DataAtributo: record})
+		if err != nil {
+			log.Printf("Error al comunicarse con el Data Node: %v", err)
+			return
+		}
+
+		log.Printf("Respuesta del Data Node: %s", res.GetMessage())
+	}
+}
+
+func writeRecord(DigimonData []string, NumDataNode int, id int64) bool{
 	file, err := os.OpenFile("INFO.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     if err != nil {
         log.Printf("error opening file: %v", err)
-		return 
+		return false
     }
     defer file.Close()
 
@@ -76,10 +106,11 @@ func writeRecord(DigimonData []string, NumDataNode int, id int64){
 
 	if _, err := file.WriteString(record); err != nil {
         log.Printf("error writing to file: %v", err)
-        return
+        return false
     }
 
     log.Println("Registro escrito correctamente")
+	return true
 }
 
 func SearchFile(name string) bool {
@@ -153,8 +184,29 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	// Conectar al Data Node 1
+    conn1, err := grpc.Dial("localhost:50052", grpc.WithInsecure()) // Puerto del Data Node 1
+    if err != nil {
+        log.Fatalf("No se pudo conectar al Data Node 1: %v", err)
+    }
+    defer conn1.Close()
+
+    // Conectar al Data Node 2
+    conn2, err := grpc.Dial("localhost:50053", grpc.WithInsecure()) // Puerto del Data Node 2
+    if err != nil {
+        log.Fatalf("No se pudo conectar al Data Node 2: %v", err)
+    }
+    defer conn2.Close()
+
+    // Crear clientes para cada Data Node
+    dataNode1Client := pbDataNode.NewStoreAtributoClient(conn1)
+    dataNode2Client := pbDataNode.NewStoreAtributoClient(conn2)
+
 	s := grpc.NewServer()
-	pb.RegisterPrimaryNodeServer(s, &server{})
+	pb.RegisterPrimaryNodeServer(s, &server{
+        dataNode1Client: dataNode1Client,
+        dataNode2Client: dataNode2Client,
+    })
 
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
