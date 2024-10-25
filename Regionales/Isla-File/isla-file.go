@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "Isla-File/generated"
+	pb "Isla-File/generated/Regionales"
 	"bufio"
 	"context"
 	"crypto/aes"
@@ -12,6 +12,7 @@ import (
 	"io"
 	"log"
 	mrand "math/rand"
+	"net"
 	"os"
 	"strconv"
 	"strings"
@@ -28,6 +29,18 @@ type Digimon struct {
 	Name      string
 	Attribute string
 	Status    string
+}
+
+type server struct {
+	pb.UnimplementedPrimaryNodeServer
+	stopChan chan struct{}
+}
+
+func (s *server) FinishRegionales(ctx context.Context, req *pb.FinishRegionalesRequest) (*pb.FinishRegionalesResponse, error) {
+	log.Println("Finalizando Isla File...")
+	// Enviar señal para cerrar el servidor
+	s.stopChan <- struct{}{}
+	return &pb.FinishRegionalesResponse{Resp: 1}, nil
 }
 
 func shuffleDigimons(slice []Digimon) {
@@ -145,15 +158,40 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading Digimons: %v", err)
 	}
-	addr := "localhost:50051" // Replace with actual IP
 
-	// Connect to the Primary Node
-	conn, client, err := connectToPrimaryNode(addr)
+	lis, err := net.Listen("tcp", ":50056")
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Fatalf("Error al iniciar Isla File: %v", err)
 	}
-	defer conn.Close()
+	stopChan := make(chan struct{})
 
-	encryptionKey := []byte("keyregionalesprimarynode") // 32-byte AES key
-	digimonSender(digimons, client, encryptionKey)
+	s := grpc.NewServer()
+	pb.RegisterPrimaryNodeServer(s, &server{stopChan: stopChan})
+
+	go func() {
+		addr := "localhost:50051" // Replace with actual IP
+
+		// Connect to the Primary Node
+		conn, client, err := connectToPrimaryNode(addr)
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+		defer conn.Close()
+
+		encryptionKey := []byte("keyregionalesprimarynode") // 32-byte AES key
+		digimonSender(digimons, client, encryptionKey)
+	}()
+
+	go func() {
+		<-stopChan
+		log.Println("Deteniendo el servidor gRPC...")
+		s.GracefulStop()
+		os.Exit(0)
+	}()
+
+	log.Println("Isla File corriendo en el puerto :50056")
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Error al servir Isla File: %v", err)
+	}
+
 }

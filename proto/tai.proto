@@ -2,10 +2,11 @@ syntax = "proto3";
 
 package Tai;
 
-option go_package = "generated/digimon";
+option go_package = "generated/Tai";
 
 service Tai {
     rpc getSacrificed(Request) returns (Response);
+    rpc finishTai (finishTaiRequest) returns (finishTaiResponse); 
 }
 
 message Request {
@@ -17,3 +18,10 @@ message Response {
   float accumulated_data = 2;    
 }
 
+message finishTaiRequest {
+    int32 req = 1;
+}
+
+message finishTaiResponse {
+    int32 resp = 1;
+}

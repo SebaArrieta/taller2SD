@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: digimon.proto
 
-package digimon
+package Regionales
 
 import (
 	context "context"
@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PrimaryNode_SendStatus_FullMethodName = "/digimon.PrimaryNode/SendStatus"
+	PrimaryNode_SendStatus_FullMethodName       = "/digimon.PrimaryNode/SendStatus"
+	PrimaryNode_FinishRegionales_FullMethodName = "/digimon.PrimaryNode/finishRegionales"
 )
 
 // PrimaryNodeClient is the client API for PrimaryNode service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PrimaryNodeClient interface {
 	SendStatus(ctx context.Context, in *DigimonStatus, opts ...grpc.CallOption) (*Response, error)
+	FinishRegionales(ctx context.Context, in *FinishRegionalesRequest, opts ...grpc.CallOption) (*FinishRegionalesResponse, error)
 }
 
 type primaryNodeClient struct {
@@ -47,11 +49,22 @@ func (c *primaryNodeClient) SendStatus(ctx context.Context, in *DigimonStatus, o
 	return out, nil
 }
 
+func (c *primaryNodeClient) FinishRegionales(ctx context.Context, in *FinishRegionalesRequest, opts ...grpc.CallOption) (*FinishRegionalesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FinishRegionalesResponse)
+	err := c.cc.Invoke(ctx, PrimaryNode_FinishRegionales_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PrimaryNodeServer is the server API for PrimaryNode service.
 // All implementations must embed UnimplementedPrimaryNodeServer
 // for forward compatibility.
 type PrimaryNodeServer interface {
 	SendStatus(context.Context, *DigimonStatus) (*Response, error)
+	FinishRegionales(context.Context, *FinishRegionalesRequest) (*FinishRegionalesResponse, error)
 	mustEmbedUnimplementedPrimaryNodeServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedPrimaryNodeServer struct{}
 
 func (UnimplementedPrimaryNodeServer) SendStatus(context.Context, *DigimonStatus) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendStatus not implemented")
+}
+func (UnimplementedPrimaryNodeServer) FinishRegionales(context.Context, *FinishRegionalesRequest) (*FinishRegionalesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinishRegionales not implemented")
 }
 func (UnimplementedPrimaryNodeServer) mustEmbedUnimplementedPrimaryNodeServer() {}
 func (UnimplementedPrimaryNodeServer) testEmbeddedByValue()                     {}
@@ -104,6 +120,24 @@ func _PrimaryNode_SendStatus_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PrimaryNode_FinishRegionales_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FinishRegionalesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PrimaryNodeServer).FinishRegionales(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PrimaryNode_FinishRegionales_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PrimaryNodeServer).FinishRegionales(ctx, req.(*FinishRegionalesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PrimaryNode_ServiceDesc is the grpc.ServiceDesc for PrimaryNode service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var PrimaryNode_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendStatus",
 			Handler:    _PrimaryNode_SendStatus_Handler,
+		},
+		{
+			MethodName: "finishRegionales",
+			Handler:    _PrimaryNode_FinishRegionales_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

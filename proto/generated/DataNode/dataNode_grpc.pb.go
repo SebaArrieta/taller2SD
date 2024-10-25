@@ -19,101 +19,177 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	StoreAtributo_GetAtributo_FullMethodName = "/DataNode.storeAtributo/getAtributo"
+	DNode_GetAtributo_FullMethodName  = "/DataNode.DNode/getAtributo"
+	DNode_SendData_FullMethodName     = "/DataNode.DNode/sendData"
+	DNode_FinishDNodes_FullMethodName = "/DataNode.DNode/finishDNodes"
 )
 
-// StoreAtributoClient is the client API for StoreAtributo service.
+// DNodeClient is the client API for DNode service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type StoreAtributoClient interface {
+type DNodeClient interface {
 	GetAtributo(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	SendData(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	FinishDNodes(ctx context.Context, in *FinishDNodesRequest, opts ...grpc.CallOption) (*FinishDNodesResponse, error)
 }
 
-type storeAtributoClient struct {
+type dNodeClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewStoreAtributoClient(cc grpc.ClientConnInterface) StoreAtributoClient {
-	return &storeAtributoClient{cc}
+func NewDNodeClient(cc grpc.ClientConnInterface) DNodeClient {
+	return &dNodeClient{cc}
 }
 
-func (c *storeAtributoClient) GetAtributo(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *dNodeClient) GetAtributo(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, StoreAtributo_GetAtributo_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, DNode_GetAtributo_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// StoreAtributoServer is the server API for StoreAtributo service.
-// All implementations must embed UnimplementedStoreAtributoServer
-// for forward compatibility.
-type StoreAtributoServer interface {
-	GetAtributo(context.Context, *Request) (*Response, error)
-	mustEmbedUnimplementedStoreAtributoServer()
+func (c *dNodeClient) SendData(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Response)
+	err := c.cc.Invoke(ctx, DNode_SendData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-// UnimplementedStoreAtributoServer must be embedded to have
+func (c *dNodeClient) FinishDNodes(ctx context.Context, in *FinishDNodesRequest, opts ...grpc.CallOption) (*FinishDNodesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FinishDNodesResponse)
+	err := c.cc.Invoke(ctx, DNode_FinishDNodes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DNodeServer is the server API for DNode service.
+// All implementations must embed UnimplementedDNodeServer
+// for forward compatibility.
+type DNodeServer interface {
+	GetAtributo(context.Context, *Request) (*Response, error)
+	SendData(context.Context, *Request) (*Response, error)
+	FinishDNodes(context.Context, *FinishDNodesRequest) (*FinishDNodesResponse, error)
+	mustEmbedUnimplementedDNodeServer()
+}
+
+// UnimplementedDNodeServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedStoreAtributoServer struct{}
+type UnimplementedDNodeServer struct{}
 
-func (UnimplementedStoreAtributoServer) GetAtributo(context.Context, *Request) (*Response, error) {
+func (UnimplementedDNodeServer) GetAtributo(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAtributo not implemented")
 }
-func (UnimplementedStoreAtributoServer) mustEmbedUnimplementedStoreAtributoServer() {}
-func (UnimplementedStoreAtributoServer) testEmbeddedByValue()                       {}
+func (UnimplementedDNodeServer) SendData(context.Context, *Request) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendData not implemented")
+}
+func (UnimplementedDNodeServer) FinishDNodes(context.Context, *FinishDNodesRequest) (*FinishDNodesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinishDNodes not implemented")
+}
+func (UnimplementedDNodeServer) mustEmbedUnimplementedDNodeServer() {}
+func (UnimplementedDNodeServer) testEmbeddedByValue()               {}
 
-// UnsafeStoreAtributoServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to StoreAtributoServer will
+// UnsafeDNodeServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DNodeServer will
 // result in compilation errors.
-type UnsafeStoreAtributoServer interface {
-	mustEmbedUnimplementedStoreAtributoServer()
+type UnsafeDNodeServer interface {
+	mustEmbedUnimplementedDNodeServer()
 }
 
-func RegisterStoreAtributoServer(s grpc.ServiceRegistrar, srv StoreAtributoServer) {
-	// If the following call pancis, it indicates UnimplementedStoreAtributoServer was
+func RegisterDNodeServer(s grpc.ServiceRegistrar, srv DNodeServer) {
+	// If the following call pancis, it indicates UnimplementedDNodeServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&StoreAtributo_ServiceDesc, srv)
+	s.RegisterService(&DNode_ServiceDesc, srv)
 }
 
-func _StoreAtributo_GetAtributo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DNode_GetAtributo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreAtributoServer).GetAtributo(ctx, in)
+		return srv.(DNodeServer).GetAtributo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StoreAtributo_GetAtributo_FullMethodName,
+		FullMethod: DNode_GetAtributo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreAtributoServer).GetAtributo(ctx, req.(*Request))
+		return srv.(DNodeServer).GetAtributo(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// StoreAtributo_ServiceDesc is the grpc.ServiceDesc for StoreAtributo service.
+func _DNode_SendData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DNodeServer).SendData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DNode_SendData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DNodeServer).SendData(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DNode_FinishDNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FinishDNodesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DNodeServer).FinishDNodes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DNode_FinishDNodes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DNodeServer).FinishDNodes(ctx, req.(*FinishDNodesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DNode_ServiceDesc is the grpc.ServiceDesc for DNode service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var StoreAtributo_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "DataNode.storeAtributo",
-	HandlerType: (*StoreAtributoServer)(nil),
+var DNode_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "DataNode.DNode",
+	HandlerType: (*DNodeServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "getAtributo",
-			Handler:    _StoreAtributo_GetAtributo_Handler,
+			Handler:    _DNode_GetAtributo_Handler,
+		},
+		{
+			MethodName: "sendData",
+			Handler:    _DNode_SendData_Handler,
+		},
+		{
+			MethodName: "finishDNodes",
+			Handler:    _DNode_FinishDNodes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

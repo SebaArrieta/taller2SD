@@ -3,7 +3,7 @@ package main
 import (
 	pbDiaboromon "Nodo-Tai/generated/Diaboromon"
 
-	// pbTai "Nodo-Tai/generated/Tai"
+	pbTai "Nodo-Tai/generated/Tai"
 	"bufio"
 	"context"
 	"fmt"
@@ -43,25 +43,25 @@ func readVariables(path string) {
 	}
 }
 
-// Solicitad los datos de los Digimons sacrificados al Primary Node
-// func requestDigimonData(client pbTai.TaiClient) (float64, error) {
-// 	req := &pbTai.Request{RequestMessage: "Solicitar datos de Digimons sacrificados"}
-// 	resp, err := client.GetSacrificed(context.Background(), req)
-// 	if err != nil {
-// 		return 0, fmt.Errorf("Error solicitando datos: %v", err)
-// 	}
-// 	fmt.Printf("Digimons sacrificados: %d, Datos acumulados: %.2f\n", resp.SacrificedDigimons, resp.AccumulatedData)
-// 	return resp.AccumulatedData, nil
-// }
+// Solicitar los datos de los Digimons sacrificados al Primary Node
+func requestDigimonData(client pbTai.TaiClient) (float32, error) {
+	req := &pbTai.Request{RequestMessage: "Solicitar datos de Digimons sacrificados"}
+	resp, err := client.GetSacrificed(context.Background(), req)
+	if err != nil {
+		return 0, fmt.Errorf("error solicitando datos: %v", err)
+	}
+	fmt.Printf("Digimons sacrificados: %d, Datos acumulados: %.2f\n", resp.SacrificedDigimons, resp.AccumulatedData)
+	return resp.AccumulatedData, nil
+}
 
-// func connectToPrimaryNode(addr string) (*grpc.ClientConn, pbTai.TaiClient, error) {
-// 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-// 	if err != nil {
-// 		return nil, nil, fmt.Errorf("no se pudo conectar: %v", err)
-// 	}
-// 	client := pbTai.NewTaiClient(conn)
-// 	return conn, client, nil
-// }
+func connectToPrimaryNode(addr string) (*grpc.ClientConn, pbTai.TaiClient, error) {
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, nil, fmt.Errorf("no se pudo conectar: %v", err)
+	}
+	client := pbTai.NewTaiClient(conn)
+	return conn, client, nil
+}
 
 func (s *server) Attack(ctx context.Context, req *pbDiaboromon.AttackRequest) (*pbDiaboromon.AttackResponse, error) {
 
@@ -78,7 +78,7 @@ func (s *server) Attack(ctx context.Context, req *pbDiaboromon.AttackRequest) (*
 }
 
 // Función para atacar a Diaboromon
-func attackDiaboromon(client pbDiaboromon.DiaboromonClient, accumulatedData float32) {
+func attackDiaboromon(client pbDiaboromon.DiaboromonClient, accumulatedData float32, clientPrimary pbTai.TaiClient) {
 	req := &pbDiaboromon.AttackRequest{Attackreq: accumulatedData}
 	resp, err := client.Attack(context.Background(), req)
 	if err != nil {
@@ -88,6 +88,10 @@ func attackDiaboromon(client pbDiaboromon.DiaboromonClient, accumulatedData floa
 	if resp.Attackresp == -1 {
 		fmt.Print("[Nodo Tai] Greymon y Garurumon han digievolucionado a Omegamon.\n")
 		fmt.Printf("[Nodo Tai] Diaboromon ha sido derrotado por Tai.\n")
+		_, err := clientPrimary.FinishTai(context.Background(), &pbTai.FinishTaiRequest{})
+		if err != nil {
+			log.Fatalf("Error notificando al Primary Node que Tai ha terminado: %v", err)
+		}
 		os.Exit(0)
 	}
 
@@ -99,6 +103,10 @@ func attackDiaboromon(client pbDiaboromon.DiaboromonClient, accumulatedData floa
 	if VI <= 0 {
 		fmt.Println("[Nodo Tai] Tai ha sido derrotado.")
 		notifyDiaboromonDefeat(client)
+		_, err := clientPrimary.FinishTai(context.Background(), &pbTai.FinishTaiRequest{})
+		if err != nil {
+			log.Fatalf("Error notificando al Primary Node que Tai ha terminado: %v", err)
+		}
 		os.Exit(0)
 	}
 
@@ -125,12 +133,13 @@ func connectToDiaboromon(addr string) (*grpc.ClientConn, pbDiaboromon.Diaboromon
 
 func main() {
 	readVariables("INPUT.txt")
-	// addrPrimaryNode := "localhost:50051"
-	addrDiaboromon := "localhost:50053"
+	var accumulatedData float32 = 0.0
+	addrPrimaryNode := "localhost:50051"
+	addrDiaboromon := "localhost:50055"
 	var connDiaboromon *grpc.ClientConn
 	var clientDiaboromon pbDiaboromon.DiaboromonClient
 
-	lis, err := net.Listen("tcp", ":50052")
+	lis, err := net.Listen("tcp", ":50054")
 	if err != nil {
 		log.Fatalf("[Nodo Tai] Error al iniciar el servidor: %v", err)
 	}
@@ -145,12 +154,12 @@ func main() {
 		}
 	}()
 
-	// // Conectar al Primary Node
-	// connPrimary, clientPrimary, err := connectToPrimaryNode(addrPrimaryNode)
-	// if err != nil {
-	// 	log.Fatalf("%v", err)
-	// }
-	// defer connPrimary.Close()
+	// Conectar al Primary Node
+	connPrimary, clientPrimary, err := connectToPrimaryNode(addrPrimaryNode)
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
+	defer connPrimary.Close()
 
 	connDiaboromon, clientDiaboromon, err = connectToDiaboromon(addrDiaboromon)
 	if err != nil {
@@ -166,25 +175,38 @@ func main() {
 		fmt.Println("0. Salir")
 
 		var option int
-		var accumulatedData float32 = 0.0
 
 		fmt.Scan(&option)
 		if flagEnd {
+			_, err := clientPrimary.FinishTai(context.Background(), &pbTai.FinishTaiRequest{})
+			if err != nil {
+				log.Fatalf("Error notificando al Primary Node que Tai ha terminado: %v", err)
+			}
 			break
 		}
 
 		switch option {
 		case 1:
-			// // Solicitar datos al Primary Node
-			// accumulatedData, err = requestDigimonData(clientPrimary)
-			// if err != nil {
-			// 	log.Fatalf("%v", err)
-			// }
+			// Solicitar datos al Primary Node
+			accumulatedData, err = requestDigimonData(clientPrimary)
+			if err != nil {
+				log.Fatalf("%v", err)
+			}
 		case 2:
-			attackDiaboromon(clientDiaboromon, accumulatedData)
+			attackDiaboromon(clientDiaboromon, accumulatedData, clientPrimary)
+
 		case 0:
 			fmt.Println("Saliendo del programa...")
+
+			// Notificar al Primary Node que Tai ha terminado
+			_, err := clientPrimary.FinishTai(context.Background(), &pbTai.FinishTaiRequest{})
+			if err != nil {
+				log.Fatalf("Error notificando al Primary Node que Tai ha terminado: %v", err)
+			}
+			notifyDiaboromonDefeat(clientDiaboromon)
+
 			return
+
 		default:
 			fmt.Println("Opción no válida. Intente de nuevo.")
 		}

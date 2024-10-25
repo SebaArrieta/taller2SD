@@ -5,13 +5,23 @@ package DataNode;
 option go_package = "generated/DataNode";
 
 message Request {
-    string DataAtributo = 1;
+    string message = 1;
 }
 
 message Response {
     string message = 1;
 }
 
-service storeAtributo {
+service DNode {
     rpc getAtributo(Request) returns (Response);
+    rpc sendData(Request) returns (Response);
+    rpc finishDNodes (finishDNodesRequest) returns (finishDNodesResponse); 
+}
+
+message finishDNodesRequest {
+    int32 req = 1;
+}
+
+message finishDNodesResponse {
+    int32 resp = 1;
 }

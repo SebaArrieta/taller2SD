@@ -94,3 +94,16 @@
 93,2,Pillomon,Sacrificado
 94,1,Gotsumon,No-Sacrificado
 95,2,Vorvomon,No-Sacrificado
+0,1,Lalamon,No-Sacrificado
+1,1,Kunemon,No-Sacrificado
+2,1,Angoramon,No-Sacrificado
+3,2,ToyAgumon (Black),Sacrificado
+4,2,Sistermon Blanc (Awake.),Sacrificado
+5,2,Neemon,Sacrificado
+6,2,Salamon,No-Sacrificado
+0,2,Terriermon (X Antibody),No-Sacrificado
+1,1,Bearmon,No-Sacrificado
+2,2,Palmon,No-Sacrificado
+3,1,Coronamon,No-Sacrificado
+4,1,Liollmon,No-Sacrificado
+0,1,Kokuwamon,No-Sacrificado

@@ -2,10 +2,11 @@ syntax = "proto3";
 
 package digimon;
 
-option go_package = "generated/digimon";
+option go_package = "generated/Regionales";
 
 service PrimaryNode {
     rpc SendStatus(DigimonStatus) returns (Response);
+    rpc finishRegionales (finishRegionalesRequest) returns (finishRegionalesResponse); 
 }
 
 message DigimonStatus {
@@ -14,4 +15,12 @@ message DigimonStatus {
 
 message Response {
     string message = 1;
+}
+
+message finishRegionalesRequest {
+    int32 req = 1;
+}
+
+message finishRegionalesResponse {
+    int32 resp = 1;
 }

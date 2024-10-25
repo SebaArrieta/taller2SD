@@ -92,7 +92,7 @@ func connectToTai(addr string) (*grpc.ClientConn, pb.DiaboromonClient, error) {
 func main() {
 	readVariables("INPUT.txt")
 
-	lis, err := net.Listen("tcp", ":50053")
+	lis, err := net.Listen("tcp", ":50055")
 	if err != nil {
 		log.Fatalf("Error al iniciar el servidor: %v", err)
 	}
@@ -107,7 +107,7 @@ func main() {
 		}
 	}()
 
-	addr := "localhost:50052" // addr tai
+	addr := "localhost:50054" // addr tai
 	var conn *grpc.ClientConn
 	var client pb.DiaboromonClient
 
