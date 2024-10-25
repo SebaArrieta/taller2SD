@@ -93,7 +93,16 @@ func (s *server) FinishDNodes(ctx context.Context, req *pbDataNode.FinishDNodesR
 	return &pbDataNode.FinishDNodesResponse{Resp: 1}, nil
 }
 
+func createFile() {
+	file, err := os.Create("INFO_2.txt")
+	if err != nil {
+		log.Fatalf("Error creating file: %v", err)
+	}
+	defer file.Close()
+}
+
 func main() {
+	createFile()
 	lis, err := net.Listen("tcp", ":50053") // Puerto para DataNode2
 	if err != nil {
 		log.Fatalf("Error al iniciar DataNode2: %v", err)

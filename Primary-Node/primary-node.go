@@ -337,7 +337,17 @@ func (s *server) FinishRegionales(ctx context.Context, req *pb.FinishRegionalesR
 	return &pb.FinishRegionalesResponse{Resp: 1}, nil
 }
 
+func createFile() {
+	file, err := os.Create("INFO.txt")
+	if err != nil {
+		log.Fatalf("Error creating file: %v", err)
+	}
+	defer file.Close()
+}
+
 func main() {
+	createFile()
+
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
