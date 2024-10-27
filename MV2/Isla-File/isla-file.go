@@ -17,6 +17,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"errors"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -134,26 +135,27 @@ func digimonSender(digimons []Digimon, client pb.PrimaryNodeClient, aesKey []byt
 	return conn, client, nil
 }*/
 
-func connectToPrimaryNode(addr string) (*grpc.ClientConn, pb.PrimaryNodeClient, error) {
+func connectToPrimaryNode(addr string, maxRetries int) (*grpc.ClientConn, pb.PrimaryNodeClient, error) {
 	var conn *grpc.ClientConn
 	var err error
 
-	// Retry loop
-	for {
+	// Retry loop with a maximum number of retries
+	for i := 0; i < maxRetries; i++ {
 		// Attempt to connect to the Primary Node
 		conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err == nil {
 			// Connection successful, break the loop
-			break
+			client := pb.NewPrimaryNodeClient(conn)
+			return conn, client, nil
 		}
 
 		// Log error and retry after 5 seconds
-		log.Printf("Failed to connect to Primary Node at %s: %v. Retrying in 5 seconds...", addr, err)
+		log.Printf("Failed to connect to Primary Node at %s: %v. Retrying in 5 seconds... (Attempt %d/%d)", addr, err, i+1, maxRetries)
 		time.Sleep(5 * time.Second) // Wait 5 seconds before retrying
 	}
 
-	client := pb.NewPrimaryNodeClient(conn)
-	return conn, client, nil
+	// Return error if unable to connect after max retries
+	return nil, nil, errors.New("failed to connect to Primary Node after max retries")
 }
 
 func readVariables(path string) {
@@ -194,7 +196,7 @@ func main() {
 		addr := "host.docker.internal:50051" // Replace with actual IP
 
 		// Connect to the Primary Node
-		conn, client, err := connectToPrimaryNode(addr)
+		conn, client, err := connectToPrimaryNode(addr, 5)
 		if err != nil {
 			log.Fatalf("%v", err)
 		}

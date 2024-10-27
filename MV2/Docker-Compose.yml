@@ -1,14 +1,16 @@
 version: '3.8'
 
 services:
-  continentefolder:
-    build: ./Continente-Folder
-    container_name: continentefolder_service
+  islafile:
+    build: ./Isla-File
+    container_name: islafile_service
     ports:
-      - "50058:50058"
+      - "50056:50056"
+    depends_on:
+      - datanode2
   
-  nododiaboromon:
-    build: ./Nodo-Diaboromon
-    container_name: nododiaboromon_service
+  datanode2:
+    build: ./DataNode2
+    container_name: datanode2_service
     ports:
-      - "50055:50055"
+      - "50053:50053"

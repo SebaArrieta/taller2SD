@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  islafile:
-    build: ./Isla-File
-    container_name: islafile_service
+  primarunode:
+    build: ./Primary-Node
+    container_name: primarynode_service
     ports:
-      - "50056:50056"
+      - "50051:50051"
   
   datanode1:
     build: ./DataNode1

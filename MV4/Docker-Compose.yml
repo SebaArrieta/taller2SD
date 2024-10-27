@@ -1,18 +1,14 @@
 version: '3.8'
 
 services:
-  nodotai:
-    build: ./Nodo-Tai
-    container_name: nodotai_service
-    depends_on:
-      - primarynode
-    stdin_open: true   # Keep the stdin open for input
-    tty: true
+  nododiaboromon:
+    build: ./Nodo-Diaboromon
+    container_name: nododiaboromon_service
     ports:
-      - "50054:50054"
+      - "50055:50055"
   
-  primarynode:
-    build: ./Primary-Node
-    container_name: primarynode_service
+  continenteserver:
+    build: ./Continente-Server
+    container_name: sontinenteserver_service
     ports:
-      - "50051:50051"
+      - "50057:50057"

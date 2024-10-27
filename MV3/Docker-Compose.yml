@@ -1,14 +1,16 @@
 version: '3.8'
 
 services:
-  continenteserver:
-    build: ./Continente-Server
-    container_name: continenteserver_service
+  continentefolder:
+    build: ./Continente-Folder
+    container_name: continentefolder_service
     ports:
-      - "50057:50057"
+      - "50058:50058"
   
-  datanode2:
-    build: ./DataNode2
-    container_name: datanode2_service
+  nodotai:
+    build: ./Nodo-Tai
+    container_name: nodotai_service
     ports:
-      - "50053:50053"
+      - "50054:50054"
+    stdin_open: true   # Keep the stdin open for input
+    tty: true
