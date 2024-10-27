@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  primarunode:
+  primarynode:
     build: ./Primary-Node
     container_name: primarynode_service
     ports:

@@ -49,9 +49,6 @@ func (s *server) SendStatus(ctx context.Context, req *pb.DigimonStatus) (*pb.Res
 		return nil, fmt.Errorf("error decrypting message: %v", err)
 	}
 
-	// Procesa el mensaje aquí
-	log.Printf("Received decrypted digimon status: %s", decryptedMsg)
-
 	digimonInfo := strings.Split(decryptedMsg, ",")
 
 	if !SearchFile(digimonInfo[0]) {
@@ -76,7 +73,9 @@ func (s *server) SendStatus(ctx context.Context, req *pb.DigimonStatus) (*pb.Res
 			sendToDataNode(numDataNode, DataNodeRecord, s)
 		}
 	}
-	return &pb.Response{Message: "Data received successfully"}, nil
+
+	log.Printf("[PRIMARY NODE] Solicitud de %s recibida, mensaje enviado: Data del digimon recibida: %s", digimonInfo[3], decryptedMsg)
+	return &pb.Response{Message: fmt.Sprintf("Data del digimon recibida: %s", decryptedMsg)}, nil
 }
 
 func (s *server) GetSacrificed(ctx context.Context, req *pbTai.Request) (*pbTai.Response, error) {
@@ -105,10 +104,10 @@ func (s *server) GetSacrificed(ctx context.Context, req *pbTai.Request) (*pbTai.
 	}
 
 	result := strings.Join(sacrificedIDs, ";")
-	log.Printf("IDs de Digimon sacrificados: %s", result)
 
 	data := getDataToDnode(result, s)
 	accumulatedData, numData := computeData(data)
+	log.Printf("[PRIMARY NODE] Solicitud de Nodo Tai recibida, mensaje enviado: {AccumulatedData: %d, SacrificedDigimons: %d}", float32(accumulatedData), int32(numData))
 	return &pbTai.Response{AccumulatedData: float32(accumulatedData), SacrificedDigimons: int32(numData)}, nil
 }
 
@@ -142,19 +141,17 @@ func sendToDataNode(dataNode int, record string, s *server) {
 	defer cancel()
 
 	if dataNode == 1 {
-		res, err := s.dataNode1Client.GetAtributo(ctxDataNode, &pbDataNode.Request{Message: record})
+		_, err := s.dataNode1Client.GetAtributo(ctxDataNode, &pbDataNode.Request{Message: record})
 		if err != nil {
 			log.Printf("Error al comunicarse con el Data Node: %v", err)
 			return
 		}
-		log.Printf("Respuesta del Data Node: %s", res.GetMessage())
 	} else if dataNode == 2 {
-		res, err := s.dataNode2Client.GetAtributo(ctxDataNode, &pbDataNode.Request{Message: record})
+		_, err := s.dataNode2Client.GetAtributo(ctxDataNode, &pbDataNode.Request{Message: record})
 		if err != nil {
 			log.Printf("Error al comunicarse con el Data Node: %v", err)
 			return
 		}
-		log.Printf("Respuesta del Data Node: %s", res.GetMessage())
 	}
 }
 
@@ -245,7 +242,6 @@ func getDataToDnode(ids string, s *server) (data string) {
 			log.Printf("Error al comunicarse con Data Node 1: %v", err1)
 			return
 		}
-		log.Printf("Respuesta de Data Node 1: %s", res1.GetMessage())
 	}()
 
 	// Goroutine para Data Node 2

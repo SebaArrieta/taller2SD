@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"fmt"
 
 	pbDataNode "DataNode2/generated/DataNode" // Ruta generada para el servicio storeAtributo
 
@@ -21,7 +22,6 @@ type server struct {
 
 // Implementación del método getAtributo
 func (s *server) GetAtributo(ctx context.Context, req *pbDataNode.Request) (*pbDataNode.Response, error) {
-	log.Printf("DataNode2 recibió: %s", req.Message)
 
 	// Guardar el atributo en el archivo INFO_2.txt
 	file, err := os.OpenFile("INFO_2.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -38,12 +38,11 @@ func (s *server) GetAtributo(ctx context.Context, req *pbDataNode.Request) (*pbD
 
 	log.Println("Datos almacenados en INFO_2.txt")
 
-	return &pbDataNode.Response{Message: "Data almacenada en DataNode2"}, nil
+	log.Printf("[<DATA NODE 2>] Solicitud de Primary Node recibida, mensaje enviado: Data %s almacenada en DataNode2", req.Message)
+	return &pbDataNode.Response{Message: fmt.Sprintf("Data %s almacenada en DataNode2", req.Message)}, nil
 }
 
 func (s *server) SendData(ctx context.Context, req *pbDataNode.Request) (*pbDataNode.Response, error) {
-	log.Printf("DataNode2 recibió solicitud para las IDs: %s", req.Message)
-
 	// Separar las IDs por ';'
 	ids := strings.Split(req.Message, ";")
 
@@ -77,11 +76,11 @@ func (s *server) SendData(ctx context.Context, req *pbDataNode.Request) (*pbData
 
 	if len(foundAttributes) > 0 {
 		result := strings.Join(foundAttributes, ";")
-		log.Printf("Atributos encontrados: %s", result)
+		log.Printf("[<DATA NODE 2>] Solicitud de Primary Node recibida, mensaje enviado: %s", result)
 		return &pbDataNode.Response{Message: result}, nil
 	}
 
-	log.Println("No se encontraron atributos para las IDs proporcionadas")
+	log.Printf("[<DATA NODE 2>] Solicitud de Primary Node recibida, mensaje enviado: -1")
 	return &pbDataNode.Response{Message: "-1"}, nil
 }
 

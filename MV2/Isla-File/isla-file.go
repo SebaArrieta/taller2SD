@@ -100,7 +100,7 @@ func determineSacrifice() string {
 func runRegionalServer(digimons []Digimon, client pb.PrimaryNodeClient, aesKey []byte) []Digimon {
 	digimon := digimons[0]
 	digimons = digimons[1:]
-	message := fmt.Sprintf("%s,%s,%s", digimon.Name, digimon.Attribute, digimon.Status)
+	message := fmt.Sprintf("%s,%s,%s,%s", digimon.Name, digimon.Attribute, digimon.Status, "Isla-File")
 	encryptedMessage, err := encryptMessage(message, aesKey)
 	if err != nil {
 		log.Fatalf("Error encrypting message: %v", err)
