@@ -124,6 +124,7 @@ func notifyDiaboromonDefeat(client pbDiaboromon.DiaboromonClient) {
 
 func connectToDiaboromon(addr string) (*grpc.ClientConn, pbDiaboromon.DiaboromonClient, error) {
 	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	fmt.Printf("[Nodo Tai] no se pudo conectar a Diaboromon %v", err)
 	if err != nil {
 		return nil, nil, fmt.Errorf("[Nodo Tai] no se pudo conectar a Diaboromon: %v", err)
 	}
@@ -134,8 +135,8 @@ func connectToDiaboromon(addr string) (*grpc.ClientConn, pbDiaboromon.Diaboromon
 func main() {
 	readVariables("INPUT.txt")
 	var accumulatedData float32 = 0.0
-	addrPrimaryNode := "localhost:50051"
-	addrDiaboromon := "localhost:50055"
+	addrPrimaryNode := "host.docker.internal:50051"
+	addrDiaboromon := "host.docker.internal:50055"
 	var connDiaboromon *grpc.ClientConn
 	var clientDiaboromon pbDiaboromon.DiaboromonClient
 
@@ -147,7 +148,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	pbDiaboromon.RegisterDiaboromonServer(grpcServer, &server{})
 
-	fmt.Println("[Nodo Tai] Servidor Tai corriendo en el puerto 50052...")
+	fmt.Println("[Nodo Tai] Servidor Tai corriendo en el puerto 50054...")
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Fatalf("[Nodo Tai] Error al iniciar el servidor gRPC: %v", err)

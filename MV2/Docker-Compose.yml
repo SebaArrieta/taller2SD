@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  continentefolder:
+    build: ./Continente-Folder
+    container_name: continentefolder_service
+    ports:
+      - "50058:50058"
+  
+  nododiaboromon:
+    build: ./Nodo-Diaboromon
+    container_name: nododiaboromon_service
+    ports:
+      - "50055:50055"

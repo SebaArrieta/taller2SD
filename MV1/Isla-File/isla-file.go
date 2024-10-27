@@ -125,11 +125,33 @@ func digimonSender(digimons []Digimon, client pb.PrimaryNodeClient, aesKey []byt
 	}
 }
 
-func connectToPrimaryNode(addr string) (*grpc.ClientConn, pb.PrimaryNodeClient, error) {
+/*func connectToPrimaryNode(addr string) (*grpc.ClientConn, pb.PrimaryNodeClient, error) {
 	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, nil, fmt.Errorf("no se pudo conectar: %v", err)
 	}
+	client := pb.NewPrimaryNodeClient(conn)
+	return conn, client, nil
+}*/
+
+func connectToPrimaryNode(addr string) (*grpc.ClientConn, pb.PrimaryNodeClient, error) {
+	var conn *grpc.ClientConn
+	var err error
+
+	// Retry loop
+	for {
+		// Attempt to connect to the Primary Node
+		conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err == nil {
+			// Connection successful, break the loop
+			break
+		}
+
+		// Log error and retry after 5 seconds
+		log.Printf("Failed to connect to Primary Node at %s: %v. Retrying in 5 seconds...", addr, err)
+		time.Sleep(5 * time.Second) // Wait 5 seconds before retrying
+	}
+
 	client := pb.NewPrimaryNodeClient(conn)
 	return conn, client, nil
 }
@@ -169,7 +191,7 @@ func main() {
 	pb.RegisterPrimaryNodeServer(s, &server{stopChan: stopChan})
 
 	go func() {
-		addr := "localhost:50051" // Replace with actual IP
+		addr := "host.docker.internal:50051" // Replace with actual IP
 
 		// Connect to the Primary Node
 		conn, client, err := connectToPrimaryNode(addr)

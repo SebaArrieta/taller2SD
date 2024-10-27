@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  nodotai:
+    build: ./Nodo-Tai
+    container_name: nodotai_service
+    depends_on:
+      - primarynode
+    stdin_open: true   # Keep the stdin open for input
+    tty: true
+    ports:
+      - "50054:50054"
+  
+  primarynode:
+    build: ./Primary-Node
+    container_name: primarynode_service
+    ports:
+      - "50051:50051"

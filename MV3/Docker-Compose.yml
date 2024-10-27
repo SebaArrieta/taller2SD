@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  continenteserver:
+    build: ./Continente-Server
+    container_name: continenteserver_service
+    ports:
+      - "50057:50057"
+  
+  datanode2:
+    build: ./DataNode2
+    container_name: datanode2_service
+    ports:
+      - "50053:50053"

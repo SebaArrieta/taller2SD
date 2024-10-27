@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  islafile:
+    build: ./Isla-File
+    container_name: islafile_service
+    ports:
+      - "50056:50056"
+  
+  datanode1:
+    build: ./DataNode1
+    container_name: datanode1_service
+    ports:
+      - "50052:50052"
