@@ -8,8 +8,8 @@
 - La distribución de los servicios es la siguiente:
   + En la maquina virtual 1 (MV1): Primary Node y DataNode1
   + En la maquina virtual 2 (MV2): DataNode2 y Isla-File
-  + En la maquina virtual 1 (MV3): Continente Folder y Nodo Tai
-  + En la maquina virtual 1 (MV4): Continente Server y Diaboromon
+  + En la maquina virtual 3 (MV3): Continente Folder y Nodo Tai
+  + En la maquina virtual 4 (MV4): Continente Server y Diaboromon
   
 ## Para la ejecución
 - Los docker utilizan docker compose up
