@@ -193,7 +193,7 @@ func main() {
 	pb.RegisterPrimaryNodeServer(s, &server{stopChan: stopChan})
 
 	go func() {
-		addr := "host.docker.internal:50051" // Replace with actual IP
+		addr := "dist101:50051" // Replace with actual IP
 
 		// Connect to the Primary Node
 		conn, client, err := connectToPrimaryNode(addr, 5)

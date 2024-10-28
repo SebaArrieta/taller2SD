@@ -107,7 +107,7 @@ func main() {
 		}
 	}()
 
-	addr := "host.docker.internal:50054" // addr tai
+	addr := "dist103:50054" // addr tai
 	var conn *grpc.ClientConn
 	var client pb.DiaboromonClient
 

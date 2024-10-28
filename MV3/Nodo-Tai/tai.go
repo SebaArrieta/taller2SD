@@ -135,8 +135,8 @@ func connectToDiaboromon(addr string) (*grpc.ClientConn, pbDiaboromon.Diaboromon
 func main() {
 	readVariables("INPUT.txt")
 	var accumulatedData float32 = 0.0
-	addrPrimaryNode := "host.docker.internal:50051"
-	addrDiaboromon := "host.docker.internal:50055"
+	addrPrimaryNode := "dist101:50051"
+	addrDiaboromon := "dist104:50055"
 	var connDiaboromon *grpc.ClientConn
 	var clientDiaboromon pbDiaboromon.DiaboromonClient
 

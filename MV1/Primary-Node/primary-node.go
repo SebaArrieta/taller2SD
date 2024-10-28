@@ -370,35 +370,35 @@ func main() {
 	}
 	
 	// Conectar al Data Node 1
-	conn1, err := grpc.Dial("host.docker.internal:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn1, err := grpc.Dial("dist101:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("No se pudo conectar al Data Node 1: %v", err)
 	}
 	defer conn1.Close()
 
 	// Conectar al Data Node 2
-	conn2, err := grpc.Dial("host.docker.internal:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn2, err := grpc.Dial("dist102:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("No se pudo conectar al Data Node 2: %v", err)
 	}
 	defer conn2.Close()
 
 	// Conectar al Data Node 2
-	conn3, err := grpc.Dial("host.docker.internal:50056", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn3, err := grpc.Dial("dist102:50056", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("No se pudo conectar a Isla File: %v", err)
 	}
 	defer conn3.Close()
 
 	// Conectar al Data Node 2
-	conn4, err := grpc.Dial("host.docker.internal:50057", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn4, err := grpc.Dial("dist104:50057", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("No se pudo conectar al Continente Server: %v", err)
 	}
 	defer conn4.Close()
 
 	// Conectar al Data Node 2
-	conn5, err := grpc.Dial("host.docker.internal:50058", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn5, err := grpc.Dial("dist103:50058", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("No se pudo conectar al Continente Folder: %v", err)
 	}
